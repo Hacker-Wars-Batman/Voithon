@@ -140,6 +140,36 @@ class RunController extends AppController {
         return $parsed;
     }
 
+    public function getFriends() {
+        $runId = $this->request->query['run_id'];
+
+        $allFriends = $this->RunFriends->find('all', [
+            'conditions' => ['RunFriends.run_id' => $runId],
+        ]);
+
+        if (empty($allFriends)) {
+            $result = [
+                'status' => 'OK',
+                'friends' => []
+            ];
+
+            $this->viewClass = 'Json';
+            $this->set(compact('result'));
+            $this->set('_serialize', 'result');
+
+            return;
+        }
+
+        var_dump($allFriends);
+
+                    $this->viewClass = 'Json';
+            $this->set(compact('result'));
+            $this->set('_serialize', 'result');
+            
+        die();
+
+    }
+
     private function addFriends($run) {
         $sql = 'SELECT name FROM run_histories ';
         $sql .= "WHERE UNIX_TIMESTAMP('{$run['date']}') < UNIX_TIMESTAMP(finish) AND ";
