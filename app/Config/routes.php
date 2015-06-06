@@ -23,9 +23,10 @@
 
 Router::connect('/users/register', array('controller' => 'users', 'action' => 'register'));
 Router::connect('/run/begin', array('controller' => 'run', 'action' => 'begin'));
-Router::connect('/run/history', array('controller' => 'run', 'action' => 'begin'));
 Router::connect('/run/finish', array('controller' => 'run', 'action' => 'finish'));
 Router::connect('/run/giveup', array('controller' => 'run', 'action' => 'giveUp'));
+Router::connect('/run/history', array('controller' => 'run', 'action' => 'getHistories'));
+Router::connect('/run/friends', array('controller' => 'run', 'action' => 'getFriends'));
 
 /**
  * ...and connect the rest of 'Pages' controller's URLs.
