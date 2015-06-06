@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 
 class RunController extends AppController {
 
-	public $uses = array('RunHistory', 'RunFriends');
+	public $uses = array('RunHistory', 'RunFriends', 'User');
 
 	public function begin() {
         $name = $this->request->query['name'];
@@ -160,14 +160,27 @@ class RunController extends AppController {
             return;
         }
 
-        var_dump($allFriends);
+        $friendNames = explode(',', $allFriends[0]['RunFriends']['names']);
 
-                    $this->viewClass = 'Json';
-            $this->set(compact('result'));
-            $this->set('_serialize', 'result');
-            
-        die();
+        foreach ($friendNames as $friendName) {
+            $friend['location'] =  $this->RunHistory->find('first', [
+                'order' => ['RunHistory.date' => 'desc'],
+                'conditions' => ['RunHistory.name' => $friendName],
+            ])['RunHistory']['location'];
 
+            $friend['name'] = $friendName;
+
+            $friends[] = $friend;
+        }
+
+        $result = [
+            'status' => 'OK',
+            'friends' => $friends,
+        ];
+
+        $this->viewClass = 'Json';
+        $this->set(compact('result'));
+        $this->set('_serialize', 'result');
     }
 
     private function addFriends($run) {
@@ -206,4 +219,5 @@ class RunController extends AppController {
                 ]
             );
     }
+
 }

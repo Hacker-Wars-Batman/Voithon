@@ -10,7 +10,6 @@ class UsersController extends AppController {
      * ユーザ登録
      */
     public function register() {
-
         $name = $this->request->query['name'];
         $pass = $this->request->query['pass'];
 
@@ -32,6 +31,39 @@ class UsersController extends AppController {
                 ];
             }
         }
+
+        $this->viewClass = 'Json';
+        $this->set(compact('result'));
+        $this->set('_serialize', 'result');
+    }
+
+    public function login() {
+        $name = $this->request->query['name'];
+        $pass = $this->request->query['pass'];
+
+        $num = $this->User->find('count', [
+            'conditions' => [
+                'User.name' => $name,
+                'User.password' => $pass,
+            ]
+        ]);
+
+        if ($num !== 1) {
+            $result = [
+                'status' => 'Error',
+                'message' => 'パスワードまたはIDを確認してください',
+            ];
+
+            $this->viewClass = 'Json';
+            $this->set(compact('result'));
+            $this->set('_serialize', 'result');
+
+            return;
+        }
+
+        $result = [
+            'status' => 'OK',
+        ];
 
         $this->viewClass = 'Json';
         $this->set(compact('result'));

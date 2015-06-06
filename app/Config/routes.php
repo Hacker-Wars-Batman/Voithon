@@ -22,6 +22,7 @@
  */
 
 Router::connect('/users/register', array('controller' => 'users', 'action' => 'register'));
+Router::connect('/users/login', array('controller' => 'users', 'action' => 'login'));
 Router::connect('/run/begin', array('controller' => 'run', 'action' => 'begin'));
 Router::connect('/run/finish', array('controller' => 'run', 'action' => 'finish'));
 Router::connect('/run/giveup', array('controller' => 'run', 'action' => 'giveUp'));
