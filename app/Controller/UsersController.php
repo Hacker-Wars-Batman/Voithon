@@ -10,14 +10,20 @@ class UsersController extends AppController {
      * ユーザ登録
      */
     public function register() {
-        $name = $this->request->query['name'];
-        $pass = $this->request->query['pass'];
+        $name = $this->request->data['name'];
+        $pass = $this->request->data['pass'];
+
+        $imgFile = $this->params['form']['imgFile'];
+        $imgType = str_replace('image/', '', $imgFile['type']);
 
         try {
             $this->User->save([
                 'name' => $name,
                 'password' => $pass,
+                'img' => 'http://' . $_SERVER['REMOTE_ADDR'] . ':8000/webroot/img/' . $name . '.' . $imgType,
             ]);
+
+            move_uploaded_file($imgFile['tmp_name'], IMAGES . $name . '.' . $imgType);
 
             $result = [
                 'status' => 'OK',

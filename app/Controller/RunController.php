@@ -170,6 +170,10 @@ class RunController extends AppController {
 
             $friend['name'] = $friendName;
 
+            $friend['img'] = $this->User->find('first', [
+                'conditions' => ['User.name' => $friendName],
+            ])['User']['img'];
+
             $friends[] = $friend;
         }
 
