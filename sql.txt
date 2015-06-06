@@ -1,0 +1,25 @@
+CREATE TABLE users (
+	name VARCHAR(100) PRIMARY KEY,
+	password VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE run_histories (
+	run_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(100),
+	target FLOAT,
+	position FLOAT,
+	status VARCHAR(20),
+	latitude DOUBLE,
+	longitude DOUBLE,
+	date TIMESTAMP,
+	finish TIMESTAMP,
+	FOREIGN KEY (name)
+		REFERENCES users (name)
+);
+
+CREATE TABLE run_friends (
+	run_id INTEGER PRIMARY KEY,
+	names TEXT,
+	FOREIGN KEY (run_id)
+		REFERENCES run_histories (run_id)
+);
