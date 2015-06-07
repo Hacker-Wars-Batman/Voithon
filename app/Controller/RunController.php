@@ -192,7 +192,7 @@ class RunController extends AppController {
 
         $this->RunFriends->save([
             'run_id' => $run['run_id'],
-            'friends' => $friends
+            'names' => $friends
         ]);
 
         return $friendsList;
