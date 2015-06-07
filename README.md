@@ -158,7 +158,7 @@ URL: /run/history
 }
 ```
 
-### 履歴の取得
+### 一緒に走った人の取得
 
 URL: /run/friends
 
