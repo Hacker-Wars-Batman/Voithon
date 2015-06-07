@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>Voithon Login Page</title>
+        <title>Voithon あなたの履歴</title>
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -20,28 +20,39 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-        <link rel="stylesheet" href="css/login.css">
+        <link rel="stylesheet" href="css/history.css">
 
         <script>
             $(function() {
-                $('.panel').hide();
-
-                $('button').click(function() {
-                    var name = $("input[name='name']").val();
-                    var pass = $("input[name='pass']").val();
-
-                    $.ajax({
-                        url: '../../users/login?name=' + name + '&pass=' + pass,
-                        async: true,
-                        cache: false
-                    }).done(function(json) {
-                        if (json['status'] !== 'Error') {
-                            window.location = './history.html?name=' + name;
+                function getParameter( ){
+                    var ret=null;
+                    var url = location.href;
+                    parameters = url.split("?");
+                    if( parameters.length > 1 ) {
+                        var params   = parameters[1].split("&");
+                        var paramsArray = [];
+                        for ( i = 0; i < params.length; i++ ) {
+                           var neet = params[i].split("=");
+                           paramsArray.push(neet[0]);
+                           paramsArray[neet[0]] = neet[1];
                         }
+                        ret = paramsArray["name"];
+                    }
+                    return ret;
+                };
 
-                        $('.panel').show();
-                        $("input[name='name']").css('margin-top', '10px');
-                    });
+                var name = getParameter();
+
+                if (name === null | name === undefined | name.length === 0) {
+                    window.location = 'login.html';
+                }
+
+                $('h1').html(name + $('h1').html());
+
+                $.ajax([
+                    url: '../../run/history?name=' . name
+                ]).done(function(json) {
+                    alert(json);
                 });
             });
         </script>
@@ -54,14 +65,9 @@
         <![endif]-->
     </head>
     <body class="container">
-        <h1>Voithon</h1>
-        <div class="panel panel-danger">
-            <div class="panel-heading">パスワードもしくはユーザ名を間違えています。</div>
-        </div>
-        <form action="../../users/login" method="get">
-            <input class="form-control" type="text" name="name" placeholder="ユーザ名" />
-            <input class="form-control" type="password" name="pass" placeholder="パスワード" />
-            <button type="button" class="btn btn-default">ログイン</button>
-        </form>
+        <h1>さんの履歴</h1>
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href="#">2015年6月7日 14時15分 5.5km</a></li>
+        </ul>
     </body>
 </html>

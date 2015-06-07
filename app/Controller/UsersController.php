@@ -13,8 +13,20 @@ class UsersController extends AppController {
         $name = $this->request->data['name'];
         $pass = $this->request->data['pass'];
 
-        $imgFile = $this->params['form']['imgFile'];
-        $imgType = str_replace('image/', '', $imgFile['type']);
+        $isDefaultImg = false;
+
+        try {
+            $imgFile = $this->params['form']['imgFile'];
+            $imgType = str_replace('image/', '', $imgFile['type']);
+        } catch (Exception $ex) {
+            $isDefaultImg = true;
+            $imgType = 'png';
+        }
+
+        if (strlen($imgType) === 0) {
+            $isDefaultImg = true;
+            $imgType = 'png';
+        }
 
         try {
             $this->User->save([
@@ -23,7 +35,14 @@ class UsersController extends AppController {
                 'img' => 'http://' . $_SERVER['REMOTE_ADDR'] . ':8000/webroot/img/' . $name . '.' . $imgType,
             ]);
 
-            move_uploaded_file($imgFile['tmp_name'], IMAGES . $name . '.' . $imgType);
+            if ($isDefaultImg) {
+                copy(
+                    'C:\app\Hacker Wars\app\webroot\img\def.png',
+                    'C:\app\Hacker Wars\app\webroot\img\\' . $name . '.png'
+                );
+            } else {
+                move_uploaded_file($imgFile['tmp_name'], IMAGES . $name . '.' . $imgType);
+            }
 
             $result = [
                 'status' => 'OK',
