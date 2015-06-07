@@ -57,3 +57,42 @@ URL: /run/begin
 + latitude: 緯度 (例) 35.681368
 + longitude: 経度 (例) 139.766076
 
+### Run Finish
+
+URL: /run/finish
+
+#### パラメータ
+
++ name: ユーザの名前
+
+#### レスポンス例
+
++ friends: 一緒に走った人
+
+
+```
+{
+    "status": "OK",
+    "friends": [
+        {
+            "location": "東京都 港区",
+            "name": "test17",
+            "img": "http://192.168.100.25:8000/webroot/img/test17.png"
+        },
+        {
+            "location": "東京都 港区",
+            "name": "test18",
+            "img": "http://192.168.100.25:8000/webroot/img/test18.png"
+        }
+    ]
+}
+```
+
+### Give Up
+
+URL: /run/giveup
+
+#### パラメータ
+
++ name: ユーザの名前
+

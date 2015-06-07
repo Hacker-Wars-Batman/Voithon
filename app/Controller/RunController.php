@@ -72,7 +72,8 @@ class RunController extends AppController {
             );
 
             $result = [
-                'status' => 'OK'
+                'status' => 'OK',
+                'friends' => $this->makeFriends($friendNames),
             ];
         } catch (Exception $ex) {
             $result = [
@@ -162,24 +163,9 @@ class RunController extends AppController {
 
         $friendNames = explode(',', $allFriends[0]['RunFriends']['names']);
 
-        foreach ($friendNames as $friendName) {
-            $friend['location'] =  $this->RunHistory->find('first', [
-                'order' => ['RunHistory.date' => 'desc'],
-                'conditions' => ['RunHistory.name' => $friendName],
-            ])['RunHistory']['location'];
-
-            $friend['name'] = $friendName;
-
-            $friend['img'] = $this->User->find('first', [
-                'conditions' => ['User.name' => $friendName],
-            ])['User']['img'];
-
-            $friends[] = $friend;
-        }
-
         $result = [
             'status' => 'OK',
-            'friends' => $friends,
+            'friends' => $this->makeFriends($friendNames),
         ];
 
         $this->viewClass = 'Json';
@@ -222,6 +208,29 @@ class RunController extends AppController {
                     'RunHistory.status' => 'running'
                 ]
             );
+    }
+
+    private function makeFriends($friendNames) {
+        if (empty($friendNames)) {
+            return [];
+        }
+
+        foreach ($friendNames as $friendName) {
+            $friend['location'] =  $this->RunHistory->find('first', [
+                'order' => ['RunHistory.date' => 'desc'],
+                'conditions' => ['RunHistory.name' => $friendName],
+            ])['RunHistory']['location'];
+
+            $friend['name'] = $friendName;
+
+            $friend['img'] = $this->User->find('first', [
+                'conditions' => ['User.name' => $friendName],
+            ])['User']['img'];
+
+            $friends[] = $friend;
+        }
+
+        return $friends;
     }
 
 }
